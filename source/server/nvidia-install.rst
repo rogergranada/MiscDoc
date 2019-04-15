@@ -202,4 +202,4 @@ Finally, we can export CUDA_HOME, PATH, and LD_LIBRARY_PATH in .bashrc to always
     export CUDA_10=/usr/local/cuda-10.0
     export CUDA_HOME=$CUDA_8
     export PATH=$CUDA_HOME/bin:$PATH
-    export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$CUDA_HOME/libnsight:$CUDA_HOME/libnvvp:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
