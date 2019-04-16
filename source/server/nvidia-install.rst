@@ -192,6 +192,23 @@ Thus, CUDA version 8.0 is installed into `/usr/local/cuda-8.0` and the link of `
     |  No running processes found                                                 |
     +-----------------------------------------------------------------------------+
 
+
+After installing CUDA, we have to install CuDNN library. To do so, we first download the lastest version from `CuDNN page <https://developer.nvidia.com/cudnn>`_. Having downloaded the `` file, we extract it and copy files to CUDA folder, as:
+
+.. code-block:: bash
+    
+    $ tar -xzvf cudnn-8.0-linux-x64-v7.tgz
+    $ cd cuda/
+    $ sudo cp include/cudnn.h /usr/local/cuda-8.0/include
+    $ sudo cp lib64/libcudnn* /usr/local/cuda-8.0/lib64
+    $ sudo chmod a+r /usr/local/cuda-8.0/include/cudnn.h /usr/local/cuda-8.0/lib64/libcudnn*
+
+    $ tar -xzvf cudnn-10.0-linux-x64-v7.5.0.56.tgz
+    $ cd cuda/
+    $ sudo cp include/cudnn.h /usr/local/cuda-10.0/include
+    $ sudo cp lib64/libcudnn* /usr/local/cuda-10.0/lib64
+    $ sudo chmod a+r /usr/local/cuda-10.0/include/cudnn.h /usr/local/cuda-10.0/lib64/libcudnn*
+
 Finally, we can export CUDA_HOME, PATH, and LD_LIBRARY_PATH in .bashrc to always access CUDA when logged, as:
 
 .. code-block:: bash
