@@ -138,6 +138,62 @@ Caffe depends on the fast key-value storage library ``LevelDB <https://github.co
 As LevelDB does not have a ``make install`` command, the last two commands will copy files to the ``$CAFFE_HOME/lib`` and ``$CAFFE_HOME/include`` folders.
 
 
+Snappy
+^^^^^^^
+
+Next, we install the compression/decompression library called `Snappy <https://github.com/google/snappy>`_ by cloning its repository from Github and compiling it locally, as:
+
+.. code-block:: bash
+
+   $ git clone https://github.com/google/snappy.git                                                                                                                
+   $ cd snappy/                                                       
+   $ mkdir build
+   $ cd build/
+   $ cmake -D CMAKE_INSTALL_PREFIX=$CAFFE_HOME ..
+
+We have to edit the ``CMakeCache.txt`` file in order to add the compilation of shared libraries. Thus, we add the line:
+
+.. code-block:: bash
+
+   CMAKE_CXX_FLAGS:STRING=-fPIC
+
+Save file and then we can compile and install as:
+
+.. code-block:: bash
+
+   $ make 
+   $ make install
+
+These commands puts the compiled library into ``$CAFFE_HOME/lib`` and ``$CAFFE_HOME/include`` folders.
+
+LMDB
+^^^^^
+
+Next, we have to compile and install `LMDB <https://github.com/LMDB/lmdb>`_ library. In order to do so, we clone its repository and compile it locally as:
+
+.. code-block:: bash
+
+   $ git clone https://github.com/LMDB/lmdb.git
+   $ cd lmdb/libraries/liblmdb
+
+Inside ``liblmdb`` folder, we edit the ``Makefile`` file changing the ``prefix`` to our local installation by changing the line:
+
+
+.. code-block:: bash
+
+   prefix  = /home/roger/Workspace/github/envs/caffe_framework/
+
+Now, we can compile by running:
+
+.. code-block:: bash
+
+   $ make
+   $ make install
+
+These commands puts the compiled library into ``$CAFFE_HOME/lib`` and ``$CAFFE_HOME/include`` folders.
+
+
+
 Caffe
 ^^^^^^
 
@@ -150,7 +206,7 @@ After installing all dependencies, we are ready for installing the `Caffe <https
    $ conda install -c anaconda cython ipython networkx six -n caffe-env
    $ conda install numpy==1.14.5 -n caffe-env
    $ conda install scipy scikit-image matplotlib h5py leveldb nose pandas pyyaml Pillow python-gflags python-dateutil -n caffe-env
-   $ conda install conda-forge opencv==3.0
+   $ conda install -c menpo opencv3 -n caffe-env
    $ conda uninstall protobuf libprotobuf
 
 After installing its Python dependencies, we convert the ``Makefile.config.example`` to ``Makefile.config`` and edit it as:
@@ -160,42 +216,38 @@ After installing its Python dependencies, we convert the ``Makefile.config.examp
    $ cp Makefile.config.example Makefile.config
    $ vi Makefile.config
 
-   # Uncomment if you're using OpenCV 3
+   USE_CUDNN := 1
    OPENCV_VERSION := 3
 
-   # CUDA directory contains bin/ and lib/ directories that we need.
-   CUDA_DIR := /usr/local/cuda-9.0
-
-   # CUDA architecture setting: going with all of them.
+   CUDA_DIR := /usr/local/cuda-8.0
    CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \
-		-gencode arch=compute_30,code=sm_30 \
-		-gencode arch=compute_35,code=sm_35 \
-		-gencode arch=compute_50,code=sm_50 \
-		-gencode arch=compute_52,code=sm_52 \
-		-gencode arch=compute_60,code=sm_60 \
-		-gencode arch=compute_61,code=sm_61 \
-		-gencode arch=compute_61,code=compute_61
+                -gencode arch=compute_20,code=sm_21 \
+                -gencode arch=compute_30,code=sm_30 \
+                -gencode arch=compute_35,code=sm_35 \
+                -gencode arch=compute_50,code=sm_50 \
+                -gencode arch=compute_52,code=sm_52 \
+                -gencode arch=compute_60,code=sm_60
 
-   # BLAS choice:
    BLAS := open
-   BLAS_INCLUDE := /home/roger/Workspace/github/CaffeFramework/include
-   BLAS_LIB := /home/roger/Workspace/github/CaffeFramework/lib
+   BLAS_INCLUDE := /opt/OpenBLAS/include
+   BLAS_LIB := /opt/OpenBlas/lib
 
-   # Python libs
-   PYTHON_LIBRARIES := boost_python3 python3.6m
-   ANACONDA_HOME := /opt/anaconda
-   PYTHON_INCLUDE := $ANACONDA_HOME/include/python3.6m \
-                  $(ANACONDA_HOME)/lib/python3.6/site-packages/numpy/core/include
-   PYTHON_LIB := $(ANACONDA_HOME)/lib
-
-   # Uncomment to support layers written in Python (will link against Python libs)
+   ANACONDA_HOME := /opt/anaconda2/envs/drnet-env
+   PYTHON_INCLUDE := $(ANACONDA_HOME)/include \
+                     $(ANACONDA_HOME)/include/python2.7 \
+                     $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include
+   PYTHON_LIB := /opt/anaconda2/envs/drnet-env/lib
    WITH_PYTHON_LAYER := 1
 
-   # Custom libraries
-   QC_CUSTOM_INCLUDE := /home/roger/Workspace/github/CaffeFramework/include                              
-   QC_CUSTOM_LIB := /home/roger/Workspace/github/CaffeFramework/lib   
+   INCLUDE_DIRS := $(PYTHON_INCLUDE) /home/roger/Workspace/github/envs/caffe_framework/include
+   LIBRARY_DIRS := $(PYTHON_LIB) /home/roger/Workspace/github/envs/caffe_framework/lib
 
-This entire ``Makefile.config`` file can be seen in our `Github page <scripts/Makefile.config>`_. After setting up all paths, we compile it using:
+   BUILD_DIR := build
+   DISTRIBUTE_DIR := distribute
+   TEST_GPUID := 0
+   Q ?= @
+
+This entire ``Makefile8.0.config`` file can be seen in our `Github page <scripts/Makefile.config>`_. After setting up all paths, we compile it using:
 
 .. code-block:: bash
 
