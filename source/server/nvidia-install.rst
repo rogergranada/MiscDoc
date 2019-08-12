@@ -193,7 +193,7 @@ Thus, CUDA version 8.0 is installed into `/usr/local/cuda-8.0` and the link of `
     +-----------------------------------------------------------------------------+
 
 
-After installing CUDA, we have to install CuDNN library. To do so, we first download the lastest version from `CuDNN page <https://developer.nvidia.com/cudnn>`_. Having downloaded the `` file, we extract it and copy files to CUDA folder, as:
+After installing CUDA, we have to install CuDNN library. To do so, we first download the lastest version from `CuDNN page <https://developer.nvidia.com/cudnn>`_. Select the `cuDNN Library for Linux` link to download the `tgz` file. Having downloaded the `cudnn-<version>-linux-x64-<version>.tgz` file, we extract it and copy files to CUDA folder, as:
 
 .. code-block:: bash
     
